@@ -3,234 +3,496 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laporan Keselamatan & Kesihatan — Sistem Lengkap</title>
+    <title>LAPORAN KESELAMATAN & KESIHATAN — KUALA LANGAT</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background: linear-gradient(135deg, #1e3a8a, #3b82f6); min-height: 100vh; padding: 20px; }
-        
-        /* Kotak Utama */
-        .container { background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); width: 100%; max-width: 1100px; margin: 0 auto; padding: 30px; }
-        .demo-badge { background: #fef3c7; color: #92400e; font-size: 0.8rem; padding: 6px 12px; border-radius: 20px; text-align: center; margin-bottom: 15px; font-weight: 600; }
-        h1 { text-align: center; color: #1e3a8a; margin-bottom: 10px; font-size: 1.5rem; }
-        .hint { font-size: 0.85rem; color: #6b7280; text-align: center; margin-bottom: 25px; line-height: 1.5; }
-        
-        /* Langkah / Panel */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
+        :root {
+            --primary: #1e3a8a;
+            --accent: #2563eb;
+            --secondary: #3b82f6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-500: #6b7280;
+            --gray-700: #374151;
+            --shadow: 0 10px 40px rgba(0,0,0,0.15);
+        }
+        body { 
+            background: linear-gradient(135deg, var(--primary), var(--secondary)); 
+            min-height: 100vh; 
+            padding: 20px; 
+        }
+        .container { 
+            background: white; 
+            border-radius: 16px; 
+            box-shadow: var(--shadow); 
+            width: 100%; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 30px; 
+        }
+        .demo-badge { 
+            background: var(--gray-100); 
+            color: var(--gray-700); 
+            font-size: 0.75rem; 
+            padding: 6px 14px; 
+            border-radius: 20px; 
+            text-align: center; 
+            margin-bottom: 15px; 
+            font-weight: 600; 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 6px; 
+            border: 1px solid var(--gray-200); 
+        }
+        .header-group { text-align: center; margin-bottom: 25px; }
+        h1 { color: var(--primary); font-size: 1.6rem; margin-bottom: 5px; }
+        h2 { font-size: 1.2rem; color: var(--primary); margin: 20px 0 10px; }
+        h3 { font-size: 1rem; color: var(--gray-700); margin: 15px 0 8px; }
+        .subtitle { color: var(--secondary); font-size: 1rem; font-weight: 500; }
+        .hint { font-size: 0.85rem; color: var(--gray-500); margin-top: 10px; line-height: 1.5; }
+        .welcome-box { 
+            background: #eef2ff; 
+            padding: 15px 20px; 
+            border-radius: 10px; 
+            margin-bottom: 20px; 
+            border-left: 4px solid var(--accent); 
+        }
+        .user-info { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            background: var(--gray-100); 
+            padding: 12px 18px; 
+            border-radius: 8px; 
+            margin-bottom: 20px; 
+            flex-wrap: wrap; 
+            gap: 10px; 
+        }
         .panel { display: none; }
-        .panel.active { display: block; }
+        .panel.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
         .narrow { max-width: 500px; margin: 0 auto; }
-        
-        /* Borang & Input */
-        .input-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 6px; font-weight: 600; color: #374151; }
-        input, select, textarea { width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 1rem; }
-        input:focus, select:focus, textarea:focus { outline: none; border-color: #3b82f6; }
-        button { width: 100%; padding: 13px; background: #2563eb; color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.3s; }
+        .toast { 
+            position: fixed; top: 20px; right: 20px; background: var(--success); 
+            color: white; padding: 16px 24px; border-radius: 10px; 
+            box-shadow: var(--shadow); z-index: 2000; transform: translateX(120%); 
+            transition: transform 0.4s ease; max-width: 360px; 
+        }
+        .toast.show { transform: translateX(0); }
+        .input-group { margin-bottom: 18px; }
+        label { display: block; margin-bottom: 6px; font-weight: 600; color: var(--gray-700); }
+        input, select, textarea { 
+            width: 100%; padding: 12px 14px; border: 2px solid var(--gray-200); 
+            border-radius: 8px; font-size: 1rem; transition: border-color 0.2s; 
+        }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); }
+        button { 
+            padding: 12px 18px; background: var(--accent); color: white; 
+            border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; 
+            cursor: pointer; transition: background 0.3s; 
+        }
         button:hover { background: #1d4ed8; }
-        .btn-secondary { background: #6b7280; margin-top: 10px; }
+        .btn-secondary { background: var(--gray-500); }
         .btn-secondary:hover { background: #4b5563; }
-        .btn-small { width: auto; padding: 8px 16px; font-size: 0.9rem; }
-        .btn-danger { background: #ef4444; }
+        .btn-small { padding: 8px 14px; font-size: 0.9rem; width: auto; }
+        .btn-danger { background: var(--danger); }
         .btn-danger:hover { background: #dc2626; }
-        .btn-warning { background: #f59e0b; }
-        .btn-warning:hover { background: #d97706; }
-        
-        .error { color: #dc2626; margin-top: 10px; text-align: center; display: none; }
-        .info { color: #0b76b9; margin-top: 10px; text-align: center; display: none; font-weight: 500; }
-        .success { color: #059669; text-align: center; padding: 15px; display: none; line-height: 1.6; }
-        
-        /* Kad Pilihan Jenis Laporan */
-        .flash-card { display: flex; gap: 15px; margin-top: 20px; }
-        .card { flex: 1; padding: 25px 15px; border: 3px solid #e5e7eb; border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.3s; }
-        .card:hover { border-color: #2563eb; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .card.security { border-left: 4px solid #f59e0b; }
-        .card.health { border-left: 4px solid #10b981; }
-        .card h3 { margin-bottom: 8px; color: #1f2937; }
-        .card p { font-size: 0.85rem; color: #6b7280; }
-        
-        /* Susunan Borang */
-        .form-row { display: flex; gap: 12px; }
-        .form-row .input-group { flex: 1; }
+        .btn-success { background: var(--success); }
+        .link-btn { 
+            background: none; border: none; color: var(--accent); padding: 0; 
+            width: auto; font-weight: 500; text-decoration: underline; cursor: pointer; 
+        }
+        .error { color: var(--danger); margin-top: 10px; text-align: center; display: none; font-weight: 500; }
+        .info-msg { color: #0b76b9; margin-top: 10px; text-align: center; display: none; font-weight: 500; }
+        .flash-card { display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap; }
+        .card { 
+            flex: 1; min-width: 240px; padding: 25px 15px; border: 3px solid var(--gray-200); 
+            border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.3s; 
+        }
+        .card:hover { border-color: var(--accent); transform: translateY(-3px); }
+        .card.security { border-left: 4px solid var(--warning); }
+        .card.health { border-left: 4px solid var(--success); }
+        .form-row { display: flex; gap: 12px; flex-wrap: wrap; }
+        .form-row .input-group { flex: 1; min-width: 200px; }
         textarea { resize: vertical; min-height: 90px; }
-        .back-link { display: inline-block; margin-top: 15px; color: #2563eb; text-decoration: none; cursor: pointer; }
-        
-        /* Papan Kawalan Admin */
-        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
-        .admin-header h2 { color: #1f2937; font-size: 1.25rem; }
-        .filter-bar { margin-bottom: 15px; display: flex; gap: 10px; flex-wrap: wrap; }
-        .filter-bar input, .filter-bar select { padding: 10px 14px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 0.9rem; width: auto; }
-        
-        table { width: 100%; border-collapse: collapse; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.08); font-size: 0.9rem; }
-        th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid #e5e7eb; vertical-align: top; }
-        th { background: #1e3a8a; color: white; font-weight: 600; }
-        tr:hover { background: #f9fafb; }
-        .tag { display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+        .back-link { display: inline-block; margin-top: 15px; color: var(--accent); text-decoration: none; }
+        .student-row { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; flex-wrap: wrap; }
+        .student-row input { flex: 1; min-width: 200px; }
+        .remove-btn { padding: 8px 12px; width: auto; background: var(--danger); }
+        .tag { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; }
         .tag.keselamatan { background: #fef3c7; color: #92400e; }
         .tag.kesihatan { background: #d1fae5; color: #065f46; }
-        .empty { text-align: center; padding: 50px 20px; color: #6b7280; }
+        .section-box { 
+            background: var(--gray-50); padding: 18px; border-radius: 10px; 
+            margin: 15px 0; border-left: 3px solid var(--success); 
+        }
+        .checkbox-row { display: flex; align-items: center; gap: 10px; margin: 10px 0; }
+        .checkbox-row input { width: auto; margin: 0; }
+        .preview-img { max-width: 200px; margin-top: 10px; border-radius: 8px; display: none; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.85rem; }
+        th, td { padding: 10px 8px; text-align: left; border-bottom: 1px solid var(--gray-200); vertical-align: top; }
+        th { background: var(--primary); color: white; white-space: nowrap; }
+        tr:hover { background: var(--gray-50); }
+        .empty { text-align: center; padding: 40px; color: var(--gray-500); }
+        .filter-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; background: var(--gray-50); padding: 15px; border-radius: 10px; align-items: flex-end; }
+        .filter-bar .input-group { margin-bottom: 0; min-width: 180px; flex: 1; }
+        .hidden { display: none !important; }
+        .admin-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+        .name-cell { font-weight: 600; color: var(--primary); }
         
-        @media(max-width: 600px) {
+        @media(max-width: 768px) {
+            .container { padding: 20px; }
             .flash-card { flex-direction: column; }
             .form-row { flex-direction: column; }
+            table { font-size: 0.75rem; }
+            th, td { padding: 6px 4px; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="demo-badge">🧪 VERSI DEMO — Satu Halaman Sahaja</div>
-        <h1>Laporan Masalah Keselamatan & Perubatan</h1>
-        <p class="hint">Kod Pelapor: <b>1010</b> | Kod Pentadbir: <b>admin100</b></p>
+    <!-- TOAST -->
+    <div class="toast" id="toast" role="alert">
+        <p id="toastMessage"></p>
+        <small id="toastSubtext"></small>
+    </div>
 
-        <!-- =================================== -->
-        <!-- PANEL 1: Masukkan Kod Akses        -->
-        <!-- =================================== -->
+    <div class="container">
+        <div style="text-align:center; margin-bottom:10px;">
+            <div class="demo-badge">🧪 SISTEM LAPORAN KUALA LANGAT</div>
+        </div>
+
+        <div class="header-group">
+            <h1>LAPORAN KESELAMATAN & KESIHATAN</h1>
+            <p class="subtitle">KAWASAN KUALA LANGAT</p>
+            <p class="hint">Kod Pelapor: <b>1010</b> | Kod Admin: <b>admin100</b> | Kata Laluan: <b>admin100</b></p>
+        </div>
+
+        <!-- PANEL 1: KOD AKSES -->
         <div class="panel active narrow" id="panelCode">
             <div class="input-group">
-                <label for="accessCode">Kod Akses</label>
+                <label>Kod Akses</label>
                 <input type="text" id="accessCode" placeholder="Masukkan kod akses...">
             </div>
             <button onclick="verifyCode()">Teruskan</button>
-            <div class="error" id="codeError">❌ Kod tidak sah! Sila semak semula.</div>
-            <div class="info" id="adminRedirect">✅ Kod pentadbir — sedang masuk ke papan kawalan...</div>
+            <div class="error" id="codeError">❌ Kod tidak sah!</div>
+            <div class="info-msg" id="adminRedirect">✅ Kod Pentadbir — sedang masuk...</div>
         </div>
 
-        <!-- =================================== -->
-        <!-- PANEL 2: Pilih Jenis Laporan       -->
-        <!-- =================================== -->
-        <div class="panel narrow" id="panelCategory">
-            <p style="text-align:center; margin-bottom:10px; color:#4b5563;">Sila pilih jenis laporan:</p>
+        <!-- PANEL 2: LOG MASUK ADMIN -->
+        <div class="panel narrow" id="panelAdminLogin">
+            <h3 style="text-align:center; margin-bottom:20px;">🔐 LOG MASUK PENTADBIR</h3>
+            <div class="input-group">
+                <label>Kata Laluan Admin</label>
+                <input type="password" id="adminPass" placeholder="Masukkan kata laluan...">
+            </div>
+            <button onclick="doAdminLogin()">Log Masuk</button>
+            <div class="error" id="adminLoginError">❌ Kata laluan salah! Cuba: <b>admin100</b></div>
+            <a class="back-link" onclick="showPanel('panelCode')">← Kembali</a>
+        </div>
+
+        <!-- PANEL 3: NAMA PELAPOR -->
+        <div class="panel narrow" id="panelReporterName">
+            <h3 style="text-align:center; margin-bottom:20px;">👤 MAKLUMAT PELAPOR</h3>
+            <div class="input-group">
+                <label>Nama Pelapor / Guru Kanan</label>
+                <input type="text" id="reporterName" placeholder="MASUKKAN NAMA ANDA..." oninput="convertToUppercase(this)">
+            </div>
+            <button onclick="saveReporterName()">Teruskan</button>
+        </div>
+
+        <!-- PANEL 4: PILIH JENIS LAPORAN -->
+        <div class="panel" id="panelCategory">
+            <div class="user-info">
+                <span><strong>Pelapor:</strong> <span id="dispName"></span></span>
+                <div style="display:flex; gap:8px;">
+                    <button class="link-btn" onclick="showHistory()">📜 Sejarah</button>
+                    <button class="btn-small btn-secondary" onclick="endSession()">Tamat</button>
+                </div>
+            </div>
+            <div class="welcome-box">
+                <p>Selamat datang, <span id="welcomeName"></span>! Sila pilih jenis laporan.</p>
+            </div>
             <div class="flash-card">
-                <div class="card security" onclick="selectCategory('keselamatan')">
-                    <h3>🛡️ Keselamatan</h3>
+                <div class="card security" onclick="selectType('keselamatan')">
+                    <h3>🛡️ KESELAMATAN</h3>
                     <p>Laporan isu keselamatan</p>
                 </div>
-                <div class="card health" onclick="selectCategory('kesihatan')">
-                    <h3>🏥 Kesihatan</h3>
-                    <p>Laporan masalah kesihatan/perubatan</p>
+                <div class="card health" onclick="selectType('kesihatan')">
+                    <h3>🏥 KESIHATAN</h3>
+                    <p>Laporan kesihatan & penyakit</p>
                 </div>
             </div>
-            <span class="back-link" onclick="goBack('panelCode')">← Kembali</span>
         </div>
 
-        <!-- =================================== -->
-        <!-- PANEL 3: Borang Laporan            -->
-        <!-- =================================== -->
-        <div class="panel narrow" id="panelForm">
-            <p style="text-align:center; margin-bottom:15px; font-weight:600; color:#2563eb;" id="catTitle"></p>
-            <form id="reportForm">
-                <input type="hidden" id="category">
+        <!-- PANEL 5: BORANG KESELAMATAN -->
+        <div class="panel" id="panelSecurityForm">
+            <div class="user-info">
+                <span><strong>Pelapor:</strong> <span id="secUserName"></span></span>
+                <div style="display:flex; gap:8px;">
+                    <button class="link-btn" onclick="showHistory()">📜 Sejarah</button>
+                    <button class="btn-small btn-secondary" onclick="backToCat()">Kembali</button>
+                </div>
+            </div>
+            <h2 style="text-align:center;">📋 LAPORAN KESELAMATAN</h2>
+            <form id="secForm">
                 <div class="form-row">
                     <div class="input-group">
-                        <label>Tarikh</label>
-                        <input type="date" id="reportDate" required>
+                        <label>Tarikh *</label>
+                        <input type="date" id="secDate" required>
                     </div>
                     <div class="input-group">
-                        <label>Masa</label>
-                        <input type="time" id="reportTime" required>
+                        <label>Masa *</label>
+                        <input type="time" id="secTime" required>
                     </div>
                 </div>
                 <div class="input-group">
-                    <label>Nama Pelapor</label>
-                    <input type="text" id="reporterName" placeholder="Masukkan nama anda" required>
+                    <label>Nama Pasti / Lokasi *</label>
+                    <input type="text" id="secLocation" oninput="convertToUppercase(this)" required placeholder="CONTOH: SK SERI INDAH / TAMAN MAJU">
                 </div>
                 <div class="input-group">
-                    <label>Masalah yang Dihadapi</label>
-                    <textarea id="problemDesc" placeholder="Terangkan masalah secara terperinci..." required></textarea>
+                    <label>Masalah Dihadapi *</label>
+                    <textarea id="secProblem" oninput="convertToUppercase(this)" required></textarea>
                 </div>
                 <div class="input-group">
-                    <label>Keperluan yang Dikehendaki</label>
-                    <textarea id="needs" placeholder="Bantuan atau tindakan yang diperlukan..." required></textarea>
+                    <label>Keperluan / Tindakan Diperlukan *</label>
+                    <textarea id="secNeed" oninput="convertToUppercase(this)" required></textarea>
                 </div>
-                <div class="form-row">
-                    <div class="input-group">
-                        <label>Nama Guru/Penjaga</label>
-                        <input type="text" id="teacherName" placeholder="Nama orang yang bertanggungjawab" required>
-                    </div>
-                    <div class="input-group">
-                        <label>No. Telefon</label>
-                        <input type="tel" id="phone" placeholder="Contoh: 012-3456789" required>
-                    </div>
+                <div class="input-group">
+                    <label>No. Telefon *</label>
+                    <input type="tel" id="secPhone" required>
                 </div>
-                <button type="submit">Hantar Laporan</button>
-                <span class="back-link" onclick="goBack('panelCategory')">← Kembali</span>
+                <button type="submit">HANTAR LAPORAN</button>
             </form>
-            <div class="success" id="successMsg">
-                ✅ Laporan berjaya disimpan! Terima kasih.<br>
-                <button class="btn-small" style="margin-top:10px;" onclick="showAdminPanel()">Lihat Semua Rekod</button>
-            </div>
         </div>
 
-        <!-- =================================== -->
-        <!-- PANEL 4: Log Masuk Admin           -->
-        <!-- =================================== -->
-        <div class="panel narrow" id="panelAdminLogin">
-            <h3 style="text-align:center; margin-bottom:20px;">🔐 Log Masuk Pentadbir</h3>
-            <div class="input-group">
-                <label for="adminPass">Kata Laluan</label>
-                <input type="password" id="adminPass" placeholder="Masukkan kata laluan: admin100">
+        <!-- PANEL 6: BORANG KESIHATAN -->
+        <div class="panel" id="panelHealthForm">
+            <div class="user-info">
+                <span><strong>Pelapor:</strong> <span id="hUserName"></span></span>
+                <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                    <button class="link-btn" onclick="showHistory()">📜 Sejarah</button>
+                    <button class="btn-small btn-secondary" onclick="backToCat()">Kembali</button>
+                </div>
             </div>
-            <button onclick="adminLogin()">Log Masuk</button>
-            <div class="error" id="adminLoginError">❌ Kata laluan salah! Cuba: <b>admin100</b></div>
-            <span class="back-link" onclick="goBack('panelCode')">← Kembali ke laman utama</span>
+            <h2 style="text-align:center;">🏥 LAPORAN KESIHATAN</h2>
+            <form id="healthForm">
+                <div class="form-row">
+                    <div class="input-group">
+                        <label>Tarikh Laporan *</label>
+                        <input type="date" id="hDate" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Masa *</label>
+                        <input type="time" id="hTime" required>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Nama Pasti / Sekolah / Lokasi *</label>
+                    <input type="text" id="hLocation" oninput="convertToUppercase(this)" required placeholder="CONTOH: SMK BUKIT KUANG / PUSAT KOMUNITI TELOK PANGGA">
+                </div>
+
+                <div class="input-group">
+                    <label>Kategori Masalah *</label>
+                    <select id="hCategory" onchange="toggleDiseaseList()" required>
+                        <option value="">-- PILIH KATEGORI --</option>
+                        <option value="PENYAKIT BERJANGKIT">PENYAKIT BERJANGKIT</option>
+                        <option value="LAPORAN SANITASI">LAPORAN SANITASI</option>
+                    </select>
+                </div>
+
+                <div id="diseaseSection" class="hidden section-box">
+                    <h3>🦠 JENIS PENYAKIT BERJANGKIT *</h3>
+                    <div class="input-group">
+                        <select id="diseaseType" onchange="toggleOtherDisease()">
+                            <option value="">-- PILIH JENIS SAKIT --</option>
+                            <option value="COVID-19">COVID-19</option>
+                            <option value="HFMD">HFMD (Penyakit Tangan, Kaki & Mulut)</option>
+                            <option value="RABIES">RABIES</option>
+                            <option value="INFLUENZA">INFLUENZA</option>
+                            <option value="CHICKEN POX">CHICKEN POX (Cacar Air)</option>
+                            <option value="LAIN-LAIN">LAIN-LAIN (Nyatakan)</option>
+                        </select>
+                    </div>
+                    <div class="input-group hidden" id="otherDiseaseInput">
+                        <label>Nyatakan Penyakit</label>
+                        <input type="text" id="diseaseOther" placeholder="NAMA PENYAKIT..." oninput="convertToUppercase(this)">
+                    </div>
+
+                    <h3>👥 MAKLUMAT PELAJAR</h3>
+                    <div class="input-group">
+                        <label>Jumlah Pelajar Terlibat</label>
+                        <input type="number" id="studentCount" min="1" placeholder="0" oninput="updateStudentRows()">
+                    </div>
+                    <div id="studentNamesContainer"></div>
+                    <button type="button" class="btn-small btn-success" style="margin:5px 0;" onclick="addStudentRow()">+ TAMBAH NAMA PELAJAR</button>
+                    
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label>Tempoh Kuarantin</label>
+                            <input type="text" id="quarantinePeriod" placeholder="CONTOH: 7 HARI / 14 HARI">
+                        </div>
+                        <div class="input-group">
+                            <label>Tarikh Disahkan</label>
+                            <input type="date" id="confirmedDate">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label>Nota / Maklumat Tambahan</label>
+                        <textarea id="diseaseNote" placeholder="MAKLUMAT LAIN..." oninput="convertToUppercase(this)"></textarea>
+                    </div>
+                </div>
+
+                <div class="section-box">
+                    <h3>✅ SENARAI SEMAK PEMANTAUAN</h3>
+                    <div class="checkbox-row">
+                        <input type="checkbox" id="reportSubmitted">
+                        <label for="reportSubmitted">Laporan Telah Dihantar</label>
+                    </div>
+                    <div class="checkbox-row">
+                        <input type="checkbox" id="notifyJKP">
+                        <label for="notifyJKP">Makluman Kepada JKP Telah Dihantar</label>
+                    </div>
+                    <div class="checkbox-row">
+                        <input type="checkbox" id="sanitationDone">
+                        <label for="sanitationDone">Sanitasi Telah Dilakukan</label>
+                    </div>
+                    
+                    <div class="input-group" style="margin-top:12px;">
+                        <label>Muat Naik Gambar Sanitasi (Tag di Papan Notis)</label>
+                        <input type="file" id="sanitationPhoto" accept="image/*" onchange="previewImage(this)">
+                        <img id="photoPreview" class="preview-img" alt="Pratonton Gambar">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>No. Telefon Pegawai Bertugas *</label>
+                    <input type="tel" id="hPhone" required>
+                </div>
+
+                <button type="submit">HANTAR LAPORAN KESIHATAN</button>
+            </form>
         </div>
 
-        <!-- =================================== -->
-        <!-- PANEL 5: Papan Kawalan Admin       -->
-        <!-- =================================== -->
+        <!-- PANEL 7: SEJARAH PENGGUNA -->
+        <div class="panel" id="panelHistory">
+            <div class="user-info">
+                <h2>📜 SEJARAH LAPORAN SAYA</h2>
+                <div style="display:flex; gap:8px;">
+                    <button class="btn-small" onclick="backToCat()">+ Laporan Baru</button>
+                    <button class="btn-small btn-danger" onclick="endSession()">Tamat</button>
+                </div>
+            </div>
+            <div class="filter-bar">
+                <div class="input-group">
+                    <label>Cari Nama Pasti / Lokasi</label>
+                    <input type="text" id="histSearch" placeholder="Masukkan nama...">
+                </div>
+                <div class="input-group">
+                    <label>Jenis Laporan</label>
+                    <select id="histType">
+                        <option value="">SEMUA JENIS</option>
+                        <option value="keselamatan">KESELAMATAN</option>
+                        <option value="kesihatan">KESIHATAN</option>
+                    </select>
+                </div>
+            </div>
+            <div id="histContainer"><p class="empty">Memuatkan data...</p></div>
+        </div>
+
+        <!-- PANEL 8: PAPAN KAWALAN ADMIN -->
         <div class="panel" id="panelAdminDashboard">
             <div class="admin-header">
-                <h2>📂 Senarai Laporan — <span id="totalCount">0</span> rekod</h2>
-                <div>
-                    <button class="btn-small btn-warning" onclick="showReportForm()">+ Hantar Laporan Baru</button>
+                <h2>📂 SEMUA LAPORAN — <span id="totalCount">0</span> REKOD</h2>
+                <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                    <button class="btn-small btn-success" onclick="exportData()">📥 Eksport CSV</button>
+                    <button class="btn-small" onclick="newUserSession()">+ Sesi Pengguna Baru</button>
                     <button class="btn-small btn-danger" onclick="clearAllData()">Kosongkan Semua</button>
                     <button class="btn-small btn-secondary" onclick="adminLogout()">Keluar</button>
                 </div>
             </div>
             
+            <!-- PENAPIS & SUSUNAN -->
             <div class="filter-bar">
-                <input type="text" id="searchInput" placeholder="Cari nama, guru atau masalah...">
-                <select id="catFilter">
-                    <option value="">Semua Jenis Laporan</option>
-                    <option value="keselamatan">Keselamatan</option>
-                    <option value="kesihatan">Kesihatan</option>
-                </select>
+                <div class="input-group">
+                    <label>Cari Nama Pasti / Lokasi / Pelapor</label>
+                    <input type="text" id="adminSearch" placeholder="Masukkan kata kunci...">
+                </div>
+                <div class="input-group">
+                    <label>Jenis Laporan</label>
+                    <select id="adminCatFilter">
+                        <option value="">SEMUA JENIS</option>
+                        <option value="keselamatan">KESELAMATAN</option>
+                        <option value="kesihatan">KESIHATAN</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Susun Mengikut</label>
+                    <select id="adminSort">
+                        <option value="date-desc">Tarikh Terkini</option>
+                        <option value="name-asc">Nama Pasti A → Z</option>
+                        <option value="name-desc">Nama Pasti Z → A</option>
+                        <option value="reporter-asc">Nama Pelapor A → Z</option>
+                        <option value="reporter-desc">Nama Pelapor Z → A</option>
+                    </select>
+                </div>
             </div>
-
-            <div id="tableContainer">
-                <p class="empty">Memuatkan data...</p>
-            </div>
+            
+            <div id="adminContainer"><p class="empty">Memuatkan data...</p></div>
         </div>
     </div>
 
     <script>
         // === TETAPAN SISTEM ===
-        const USER_CODE = "1010";
-        const ADMIN_CODE = "admin100";
-        const ADMIN_PASSWORD = "admin100";
-        const STORAGE_KEY = "laporan_rekod";
+        const USER_CODE = '1010';
+        const ADMIN_CODE = 'admin100';
+        const ADMIN_PASSWORD = 'admin100';
+        const STORAGE_KEY = 'laporan_klg_data';
+        const ADMIN_SESSION = 'laporan_admin_login';
         
-        let allData = [];
+        let reporterName = '';
+        let studentRowCount = 0;
 
-        // Tukar paparan panel aktif
-        function showPanel(panelId) {
+        // === FUNGSI ASAS ===
+        function convertToUppercase(el) {
+            const s = el.selectionStart, e = el.selectionEnd;
+            el.value = el.value.toUpperCase();
+            el.setSelectionRange(s, e);
+        }
+
+        function showToast(msg, sub='') {
+            const t = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = msg;
+            document.getElementById('toastSubtext').textContent = sub;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 4000);
+        }
+
+        function showPanel(id) {
             document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-            document.getElementById(panelId).classList.add('active');
+            document.getElementById(id).classList.add('active');
         }
 
-        // Kembali ke panel sebelumnya & padam mesej
-        function goBack(panelId) {
-            showPanel(panelId);
-            document.querySelectorAll('.error, .info, .success').forEach(el => el.style.display = 'none');
+        function endSession() {
+            localStorage.removeItem(STORAGE_KEY + '_user');
+            sessionStorage.removeItem(ADMIN_SESSION);
+            reporterName = '';
+            showPanel('panelCode');
         }
 
-        // Semak kod akses
+        // === SEMAK KOD AKSES ===
         function verifyCode() {
-            const code = document.getElementById('accessCode').value.trim();
-            
-            if (code === ADMIN_CODE) {
+            const c = document.getElementById('accessCode').value.trim();
+            document.getElementById('codeError').style.display = 'none';
+            document.getElementById('adminRedirect').style.display = 'none';
+
+            if (c === ADMIN_CODE) {
                 document.getElementById('adminRedirect').style.display = 'block';
-                document.getElementById('codeError').style.display = 'none';
                 setTimeout(() => {
-                    if (sessionStorage.getItem('adminLoggedIn') === 'true') {
+                    if (sessionStorage.getItem(ADMIN_SESSION) === 'true') {
                         loadAdminDashboard();
                     } else {
                         showPanel('panelAdminLogin');
@@ -238,173 +500,365 @@
                 }, 1200);
                 return;
             }
-            
-            if (code === USER_CODE) {
-                showPanel('panelCategory');
-                document.getElementById('codeError').style.display = 'none';
-            } else {
-                document.getElementById('codeError').style.display = 'block';
+
+            if (c === USER_CODE) {
+                const savedUser = localStorage.getItem(STORAGE_KEY + '_user');
+                if (savedUser) {
+                    reporterName = savedUser;
+                    document.getElementById('dispName').textContent = reporterName;
+                    document.getElementById('welcomeName').textContent = reporterName;
+                    showPanel('panelCategory');
+                } else {
+                    showPanel('panelReporterName');
+                }
+                return;
             }
+
+            document.getElementById('codeError').style.display = 'block';
         }
 
-        // Pilih jenis laporan
-        function selectCategory(cat) {
-            document.getElementById('category').value = cat;
-            document.getElementById('catTitle').textContent = 
-                cat === 'keselamatan' ? '📋 LAPORAN KESELAMATAN' : '🏥 LAPORAN KESIHATAN/PERUBATAN';
-            const now = new Date();
-            document.getElementById('reportDate').value = now.toISOString().split('T')[0];
-            document.getElementById('reportTime').value = now.toTimeString().slice(0,5);
-            showPanel('panelForm');
-        }
-
-        // Hantar borang laporan
-        document.getElementById('reportForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const formData = {
-                id: Date.now(),
-                category: document.getElementById('category').value,
-                date: document.getElementById('reportDate').value,
-                time: document.getElementById('reportTime').value,
-                reporterName: document.getElementById('reporterName').value,
-                problem: document.getElementById('problemDesc').value,
-                needs: document.getElementById('needs').value,
-                teacherName: document.getElementById('teacherName').value,
-                phone: document.getElementById('phone').value,
-                createdAt: new Date().toLocaleString('ms-MY')
-            };
-
-            // Simpan ke localStorage
-            let records = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-            records.unshift(formData);
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
-
-            document.getElementById('successMsg').style.display = 'block';
-            this.reset();
-        });
-
-        // Pintas ke papan kawalan dari mesej berjaya
-        function showAdminPanel() {
-            if (sessionStorage.getItem('adminLoggedIn') === 'true') {
-                loadAdminDashboard();
-            } else {
-                showPanel('panelAdminLogin');
-            }
-        }
-
-        // Pintas ke borang dari papan kawalan
-        function showReportForm() {
-            showPanel('panelCode');
-            document.getElementById('accessCode').value = '';
-        }
-
-        // Log masuk admin
-        function adminLogin() {
+        // === LOG MASUK ADMIN ===
+        function doAdminLogin() {
             const pass = document.getElementById('adminPass').value.trim();
             if (pass === ADMIN_PASSWORD) {
-                sessionStorage.setItem('adminLoggedIn', 'true');
+                sessionStorage.setItem(ADMIN_SESSION, 'true');
+                document.getElementById('adminLoginError').style.display = 'none';
                 loadAdminDashboard();
             } else {
                 document.getElementById('adminLoginError').style.display = 'block';
             }
         }
 
-        // Keluar dari admin
         function adminLogout() {
-            sessionStorage.removeItem('adminLoggedIn');
-            allData = [];
+            sessionStorage.removeItem(ADMIN_SESSION);
             showPanel('panelCode');
             document.getElementById('accessCode').value = '';
+            document.getElementById('adminPass').value = '';
         }
 
-        // Muatkan papan kawalan admin
         function loadAdminDashboard() {
             showPanel('panelAdminDashboard');
-            refreshData();
+            renderAdminData();
         }
 
-        // Segarkan semula data dari simpanan
-        function refreshData() {
-            allData = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-            document.getElementById('totalCount').textContent = allData.length;
-            renderTable();
+        // === SIMPAN NAMA PELAPOR ===
+        function saveReporterName() {
+            const n = document.getElementById('reporterName').value.trim();
+            if (!n) { alert('Sila masukkan nama anda!'); return; }
+            reporterName = n;
+            localStorage.setItem(STORAGE_KEY + '_user', n);
+            document.getElementById('dispName').textContent = n;
+            document.getElementById('welcomeName').textContent = n;
+            showPanel('panelCategory');
         }
 
-        // Paparkan jadual rekod
-        function renderTable() {
-            if (!allData.length) {
-                document.getElementById('tableContainer').innerHTML = `
-                    <p class="empty">
-                        Belum ada laporan diterima.<br>
-                        Hantar laporan dahulu melalui borang di laman utama.
-                    </p>`;
+        // === PILIH JENIS LAPORAN ===
+        function selectType(type) {
+            if (type === 'keselamatan') {
+                document.getElementById('secUserName').textContent = reporterName;
+                const now = new Date();
+                document.getElementById('secDate').value = now.toISOString().split('T')[0];
+                document.getElementById('secTime').value = now.toTimeString().slice(0,5);
+                showPanel('panelSecurityForm');
+            } else {
+                document.getElementById('hUserName').textContent = reporterName;
+                const now = new Date();
+                document.getElementById('hDate').value = now.toISOString().split('T')[0];
+                document.getElementById('hTime').value = now.toTimeString().slice(0,5);
+                showPanel('panelHealthForm');
+            }
+        }
+
+        function backToCat() {
+            showPanel('panelCategory');
+        }
+
+        // === FUNGSI BORANG KESIHATAN ===
+        function toggleDiseaseList() {
+            const cat = document.getElementById('hCategory').value;
+            document.getElementById('diseaseSection').classList.toggle('hidden', cat !== 'PENYAKIT BERJANGKIT');
+        }
+
+        function toggleOtherDisease() {
+            const isOther = document.getElementById('diseaseType').value === 'LAIN-LAIN';
+            document.getElementById('otherDiseaseInput').classList.toggle('hidden', !isOther);
+        }
+
+        function addStudentRow() {
+            const container = document.getElementById('studentNamesContainer');
+            const row = document.createElement('div');
+            row.className = 'student-row';
+            row.innerHTML = `
+                <input type="text" placeholder="NAMA PELAJAR (Pilihan)" class="student-name-input" oninput="convertToUppercase(this)">
+                <button type="button" class="remove-btn btn-small" onclick="this.parentElement.remove()">✕</button>
+            `;
+            container.appendChild(row);
+        }
+
+        function updateStudentRows() {
+            const count = parseInt(document.getElementById('studentCount').value) || 0;
+            const container = document.getElementById('studentNamesContainer');
+            container.innerHTML = '';
+            for (let i = 0; i < count; i++) addStudentRow();
+        }
+
+        function previewImage(input) {
+            const preview = document.getElementById('photoPreview');
+            if (input.files && input.files[0]) {
+                const r = new FileReader();
+                r.onload = e => { preview.src = e.target.result; preview.style.display = 'block'; };
+                r.readAsDataURL(input.files[0]);
+            } else preview.style.display = 'none';
+        }
+
+        // === SIMPAN REKOD ===
+        function saveRecord(data) {
+            const records = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+            records.unshift(data);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+        }
+
+        // === HANTAR BORANG KESELAMATAN ===
+        document.getElementById('secForm').addEventListener('submit', e => {
+            e.preventDefault();
+            saveRecord({
+                id: Date.now(),
+                type: 'keselamatan',
+                reporter: reporterName,
+                location: document.getElementById('secLocation').value.trim(),
+                date: document.getElementById('secDate').value,
+                time: document.getElementById('secTime').value,
+                problem: document.getElementById('secProblem').value.trim(),
+                need: document.getElementById('secNeed').value.trim(),
+                phone: document.getElementById('secPhone').value.trim(),
+                createdAt: new Date().toLocaleString('ms-MY')
+            });
+            showToast('✅ LAPORAN DIHANTAR!', 'Terima kasih, ' + reporterName);
+            e.target.reset();
+            backToCat();
+        });
+
+        // === HANTAR BORANG KESIHATAN ===
+        document.getElementById('healthForm').addEventListener('submit', e => {
+            e.preventDefault();
+            const names = [];
+            document.querySelectorAll('.student-name-input').forEach(inp => {
+                if (inp.value.trim()) names.push(inp.value.trim());
+            });
+            const photoEl = document.getElementById('photoPreview');
+            const photoData = photoEl.style.display === 'block' ? photoEl.src : '';
+
+            saveRecord({
+                id: Date.now(),
+                type: 'kesihatan',
+                reporter: reporterName,
+                location: document.getElementById('hLocation').value.trim(),
+                date: document.getElementById('hDate').value,
+                time: document.getElementById('hTime').value,
+                healthCategory: document.getElementById('hCategory').value,
+                diseaseType: document.getElementById('diseaseType').value,
+                diseaseOther: document.getElementById('diseaseOther').value.trim(),
+                studentCount: document.getElementById('studentCount').value || '0',
+                studentNames: names,
+                quarantinePeriod: document.getElementById('quarantinePeriod').value.trim(),
+                confirmedDate: document.getElementById('confirmedDate').value,
+                diseaseNote: document.getElementById('diseaseNote').value.trim(),
+                reportSubmitted: document.getElementById('reportSubmitted').checked,
+                notifyJKP: document.getElementById('notifyJKP').checked,
+                sanitationDone: document.getElementById('sanitationDone').checked,
+                sanitationPhoto: photoData,
+                phone: document.getElementById('hPhone').value.trim(),
+                createdAt: new Date().toLocaleString('ms-MY')
+            });
+            showToast('✅ LAPORAN KESIHATAN DIHANTAR!', 'Terima kasih, ' + reporterName);
+            e.target.reset();
+            document.getElementById('photoPreview').style.display = 'none';
+            document.getElementById('studentNamesContainer').innerHTML = '';
+            backToCat();
+        });
+
+        // === SEJARAH PENGGUNA ===
+        function showHistory() {
+            showPanel('panelHistory');
+            renderHistory();
+        }
+
+        function renderHistory() {
+            let records = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+            records = records.filter(r => r.reporter === reporterName);
+            const search = (document.getElementById('histSearch')?.value || '').toLowerCase();
+            const typeFilter = document.getElementById('histType')?.value || '';
+
+            records = records.filter(r => {
+                const mSearch = !search || (r.location || '').toLowerCase().includes(search);
+                const mType = !typeFilter || r.type === typeFilter;
+                return mSearch && mType;
+            });
+
+            if (!records.length) {
+                document.getElementById('histContainer').innerHTML = '<p class="empty">BELUM ADA LAPORAN DIHANTAR.</p>';
                 return;
             }
 
-            const search = document.getElementById('searchInput').value.toLowerCase();
-            const catFilter = document.getElementById('catFilter').value;
-            
-            const filtered = allData.filter(r => {
-                const matchSearch = !search || 
-                    r.reporterName?.toLowerCase().includes(search) ||
-                    r.teacherName?.toLowerCase().includes(search) ||
-                    r.problem?.toLowerCase().includes(search);
-                const matchCat = !catFilter || r.category === catFilter;
-                return matchSearch && matchCat;
+            let html = `<table><thead><tr>
+                <th>Tarikh</th>
+                <th>Jenis</th>
+                <th>Nama Pasti / Lokasi</th>
+                <th>Butiran</th>
+                <th>Telefon</th>
+            </tr></thead><tbody>`;
+            records.forEach(r => {
+                let details = '';
+                if (r.type === 'keselamatan') details = (r.problem || '').substring(0,45);
+                else {
+                    details = r.healthCategory || r.type;
+                    if (r.diseaseType) details += ` — ${r.diseaseType === 'LAIN-LAIN' ? r.diseaseOther : r.diseaseType}`;
+                    if (r.sanitationDone) details += ' ✅ SANITASI DILAKUKAN';
+                }
+                html += `<tr>
+                    <td>${r.date || '-'}<br><small>${r.time || '-'}</small></td>
+                    <td><span class="tag ${r.type}">${r.type.toUpperCase()}</span></td>
+                    <td class="name-cell">${r.location || '-'}</td>
+                    <td style="max-width:280px;">${details}</td>
+                    <td>${r.phone || '-'}</td>
+                </tr>`;
             });
-
-            let html = `
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Tarikh / Masa</th>
-                            <th>Jenis</th>
-                            <th>Nama Pelapor</th>
-                            <th>Masalah</th>
-                            <th>Keperluan</th>
-                            <th>Nama Guru</th>
-                            <th>No. Telefon</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            `;
-            
-            filtered.forEach(r => {
-                html += `
-                    <tr>
-                        <td><strong>${r.date || '-'}</strong><br><small>${r.time || '-'}</small></td>
-                        <td><span class="tag ${r.category}">${r.category || '-'}</span></td>
-                        <td>${r.reporterName || '-'}</td>
-                        <td style="max-width:200px;">${r.problem ? r.problem.substring(0,50) + (r.problem.length>50?'...':'') : '-'}</td>
-                        <td style="max-width:180px;">${r.needs ? r.needs.substring(0,40) + (r.needs.length>40?'...':'') : '-'}</td>
-                        <td>${r.teacherName || '-'}</td>
-                        <td>${r.phone || '-'}</td>
-                    </tr>
-                `;
-            });
-            
             html += '</tbody></table>';
-            document.getElementById('tableContainer').innerHTML = html;
+            document.getElementById('histContainer').innerHTML = html;
         }
 
-        // Padam semua rekod
+        // === PAPAN KAWALAN ADMIN — DIKEMAS KINI ===
+        function renderAdminData() {
+            let records = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+            document.getElementById('totalCount').textContent = records.length;
+            
+            const search = (document.getElementById('adminSearch')?.value || '').toLowerCase();
+            const catFilter = document.getElementById('adminCatFilter')?.value || '';
+            const sortBy = document.getElementById('adminSort')?.value || 'date-desc';
+
+            // Penapis
+            records = records.filter(r => {
+                const mSearch = !search || 
+                    (r.reporter || '').toLowerCase().includes(search) ||
+                    (r.location || '').toLowerCase().includes(search) ||
+                    (r.phone || '').includes(search);
+                const mCat = !catFilter || r.type === catFilter;
+                return mSearch && mCat;
+            });
+
+            // Susun mengikut pilihan
+            if (sortBy === 'name-asc') {
+                records.sort((a, b) => (a.location || '').localeCompare(b.location || ''));
+            } else if (sortBy === 'name-desc') {
+                records.sort((a, b) => (b.location || '').localeCompare(a.location || ''));
+            } else if (sortBy === 'reporter-asc') {
+                records.sort((a, b) => (a.reporter || '').localeCompare(b.reporter || ''));
+            } else if (sortBy === 'reporter-desc') {
+                records.sort((a, b) => (b.reporter || '').localeCompare(a.reporter || ''));
+            }
+            // 'date-desc' = kekal susunan asal (terkini di atas)
+
+            if (!records.length) {
+                document.getElementById('adminContainer').innerHTML = '<p class="empty">TIADA REKOD DITEMUI.</p>';
+                return;
+            }
+
+            // Jadual lengkap dengan Nama Pasti/Lokasi
+            let html = `<table><thead><tr>
+                <th>Tarikh</th>
+                <th>Jenis</th>
+                <th>Nama Pasti / Lokasi</th>
+                <th>Pelapor</th>
+                <th>Butiran</th>
+                <th>Telefon</th>
+            </tr></thead><tbody>`;
+            
+            records.forEach(r => {
+                let details = '';
+                if (r.type === 'keselamatan') {
+                    details = (r.problem || '').substring(0,40);
+                } else {
+                    details = r.healthCategory || r.type;
+                    if (r.diseaseType) {
+                        details += ` — ${r.diseaseType === 'LAIN-LAIN' ? r.diseaseOther : r.diseaseType}`;
+                    }
+                    if (r.studentCount && r.studentCount !== '0') {
+                        details += `<br>👥 ${r.studentCount} pelajar`;
+                        if (r.studentNames?.length) {
+                            details += `: ${r.studentNames.join(', ').substring(0,40)}`;
+                        }
+                    }
+                    if (r.quarantinePeriod) details += `<br>⏱ Kuarantin: ${r.quarantinePeriod}`;
+                    if (r.sanitationDone) details += '<br>✅ SANITASI DILAKUKAN';
+                }
+                
+                html += `<tr>
+                    <td>${r.date || '-'}<br><small>${r.time || '-'}</small></td>
+                    <td><span class="tag ${r.type}">${r.type.toUpperCase()}</span></td>
+                    <td class="name-cell">${r.location || '-'}</td>
+                    <td>${r.reporter || '-'}</td>
+                    <td style="max-width:300px; font-size:0.8rem;">${details}</td>
+                    <td>${r.phone || '-'}</td>
+                </tr>`;
+            });
+            html += '</tbody></table>';
+            document.getElementById('adminContainer').innerHTML = html;
+        }
+
+        // === EKSPORT DATA ===
+        function exportData() {
+            const records = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+            if (!records.length) { alert('Tiada data untuk dieksport!'); return; }
+            let csv = 'Tarikh,Jenis,NamaPastiLokasi,Pelapor,Kategori,Penyakit,JumlahPelajar,Telefon\n';
+            records.forEach(r => {
+                const esc = s => `"${(s||'').toString().replace(/"/g,'""')}"`;
+                csv += `${esc(r.date + ' ' + r.time)},${esc(r.type)},${esc(r.location)},${esc(r.reporter)},${esc(r.healthCategory)},${esc(r.diseaseType)},${esc(r.studentCount)},${esc(r.phone)}\n`;
+            });
+            const blob = new Blob([csv], {type:'text/csv;charset=utf-8'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `laporan_kualalangat_${new Date().toISOString().slice(0,10)}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('✅ Dieksport!', 'Fail CSV dimuat turun');
+        }
+
         function clearAllData() {
-            if (confirm('⚠️ Pasti mahu memadam SEMUA rekod? Tindakan ini TIDAK BOLEH dibatalkan!')) {
+            if (confirm('Pasti padam SEMUA rekod? Tindakan ini tidak boleh dibatalkan!')) {
                 localStorage.removeItem(STORAGE_KEY);
-                refreshData();
+                renderAdminData();
+                showToast('✅ Dipadam', 'Semua rekod telah dikosongkan');
             }
         }
 
-        // Semak jika sudah log masuk semasa buka halaman
-        window.addEventListener('load', function() {
-            // Auto masuk ke admin jika sudah log masuk sebelumnya
-            // (pilihan: buka terus ke panel kod untuk keseragaman)
-        });
+        function newUserSession() {
+            localStorage.removeItem(STORAGE_KEY + '_user');
+            reporterName = '';
+            showPanel('panelCode');
+        }
 
-        // Pencarian & penapisan masa nyata
-        document.getElementById('searchInput').addEventListener('input', renderTable);
-        document.getElementById('catFilter').addEventListener('change', renderTable);
+        // Pengendali penapis masa nyata
+        document.getElementById('histSearch')?.addEventListener('input', renderHistory);
+        document.getElementById('histType')?.addEventListener('change', renderHistory);
+        document.getElementById('adminSearch')?.addEventListener('input', renderAdminData);
+        document.getElementById('adminCatFilter')?.addEventListener('change', renderAdminData);
+        document.getElementById('adminSort')?.addEventListener('change', renderAdminData);
+
+        // Pulihkan sesi semasa buka halaman
+        window.addEventListener('load', () => {
+            if (sessionStorage.getItem(ADMIN_SESSION) === 'true') {
+                loadAdminDashboard();
+                return;
+            }
+            const savedUser = localStorage.getItem(STORAGE_KEY + '_user');
+            if (savedUser) {
+                reporterName = savedUser;
+                document.getElementById('dispName').textContent = reporterName;
+                document.getElementById('welcomeName').textContent = reporterName;
+                showPanel('panelCategory');
+            }
+        });
     </script>
 </body>
 </html>
